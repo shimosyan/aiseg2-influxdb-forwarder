@@ -75,7 +75,51 @@ export class AiSEG2 {
     };
   }
 
-  async getUsagePowerDetails() {}
+  async getUsagePowerDetails() {
+    let pageEndCheck: string = '';
+    let pageCount = 1;
+    const maxCount = 20;
+
+    const usagePowerItems: MetricsElement[] = [];
+
+    do {
+      const response = await this.client.fetch(
+        `http://${this.host}/page/electricflow/1113?id=${pageCount}`,
+      );
+      const body = await response.text();
+
+      const dom = await new JSDOM(body);
+      const document = dom.window.document;
+
+      // 重複ページかどうかチェック
+      const checkDuplicate: string[] = [];
+      for (let index = 1; index <= 10; index++) {
+        const name = document.querySelector(`#stage_${index} > div.c_device`)?.textContent;
+        checkDuplicate.push(name ?? '');
+      }
+      if (pageEndCheck === checkDuplicate.join(',')) {
+        break;
+      }
+
+      for (let index = 1; index <= 10; index++) {
+        const name = document.querySelector(`#stage_${index} > div.c_device`)?.textContent;
+        if (name === '' || name === null || name === undefined) {
+          continue;
+        }
+
+        usagePowerItems.push({
+          name: `${name}(W)`,
+          value: this.getNumericValue(
+            document.querySelector(`#stage_${index} > div.c_value`)?.textContent,
+          ),
+        });
+      }
+      pageEndCheck = checkDuplicate.join(',');
+      pageCount++;
+    } while (pageCount <= maxCount);
+
+    return usagePowerItems;
+  }
 }
 
 class AiSEG2Error extends Error {

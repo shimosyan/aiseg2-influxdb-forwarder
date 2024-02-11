@@ -17,6 +17,9 @@ async function run() {
 
     const powerSummary = await aiseg2.getPowerSummary();
     console.log(now.format('YYYY-MM-DD HH:mm:ss'), 'powerSummary', powerSummary);
+
+    const usagePowerDetails = await aiseg2.getUsagePowerDetails();
+    console.log(now.format('YYYY-MM-DD HH:mm:ss'), 'usagePowerDetails', usagePowerDetails);
   }
 
   async function interval(microSeconds: number) {
