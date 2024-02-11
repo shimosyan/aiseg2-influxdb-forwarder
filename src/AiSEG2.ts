@@ -8,12 +8,11 @@ type MetricsElement = {
 
 export class AiSEG2 {
   private readonly host: string;
-  private readonly user: string;
-  private readonly password: string;
+  private readonly client: DigestClient;
 
-  constructor(ipAddress: string, user: string, password: string) {
-    if (ipAddress === '') {
-      throw new AiSEG2Error('AiSEG2 の IP アドレスが指定されていません。');
+  constructor(host: string, user: string, password: string) {
+    if (host === '') {
+      throw new AiSEG2Error('AiSEG2 のホストが指定されていません。');
     }
     if (user === '') {
       throw new AiSEG2Error('AiSEG2 のログインユーザー名が指定されていません。');
@@ -22,9 +21,8 @@ export class AiSEG2 {
       throw new AiSEG2Error('AiSEG2 のログインパスワードが指定されていません。');
     }
 
-    this.host = ipAddress;
-    this.user = user;
-    this.password = password;
+    this.host = host;
+    this.client = new DigestClient(user, password, { algorithm: 'MD5' });
   }
 
   private getNumericValue(input: string | null | undefined): number {
@@ -36,8 +34,7 @@ export class AiSEG2 {
   }
 
   async getPowerSummary() {
-    const client = new DigestClient(this.user, this.password, { algorithm: 'MD5' });
-    const response = await client.fetch(`http://${this.host}/page/electricflow/111`);
+    const response = await this.client.fetch(`http://${this.host}/page/electricflow/111`);
     const body = await response.text();
 
     const dom = await new JSDOM(body);
