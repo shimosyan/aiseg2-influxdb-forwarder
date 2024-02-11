@@ -19,7 +19,7 @@ export class Config {
     return value;
   }
 
-  static getAisegIpAddress(envName = 'AISEG2_IP_ADDRESS') {
+  static getAisegHost(envName = 'AISEG2_HOST') {
     return Config.getEnvValue(envName);
   }
 
@@ -29,16 +29,6 @@ export class Config {
 
   static getAisegPassword(envName = 'AISEG2_PASSWORD') {
     return Config.getEnvValue(envName);
-  }
-
-  static getChromePath(envName = 'CHROME_PATH') {
-    const value = process.env[envName];
-    return value === '' ? undefined : value;
-  }
-
-  static getHeadlessMode(envName = 'DEBUG_IS_HEADLESS'): boolean | 'new' {
-    const value = process.env[envName];
-    return value !== 'TRUE' ? 'new' : false;
   }
 }
 

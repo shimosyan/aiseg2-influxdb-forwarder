@@ -1,5 +1,5 @@
-import * as Puppeteer from 'puppeteer';
 import { JSDOM } from 'jsdom';
+import DigestClient from 'digest-fetch';
 
 type MetricsElement = {
   name: string;
@@ -7,16 +7,11 @@ type MetricsElement = {
 };
 
 export class AiSEG2 {
-  private readonly ipAddress: string;
+  private readonly host: string;
   private readonly user: string;
   private readonly password: string;
 
-  constructor(
-    private page: Puppeteer.Page,
-    ipAddress: string,
-    user: string,
-    password: string,
-  ) {
+  constructor(ipAddress: string, user: string, password: string) {
     if (ipAddress === '') {
       throw new AiSEG2Error('AiSEG2 の IP アドレスが指定されていません。');
     }
@@ -27,7 +22,7 @@ export class AiSEG2 {
       throw new AiSEG2Error('AiSEG2 のログインパスワードが指定されていません。');
     }
 
-    this.ipAddress = ipAddress;
+    this.host = ipAddress;
     this.user = user;
     this.password = password;
   }
@@ -41,15 +36,11 @@ export class AiSEG2 {
   }
 
   async getPowerSummary() {
-    await this.page.authenticate({ username: this.user, password: this.password });
-    await this.page.goto(`http://${this.ipAddress}/page/electricflow/111`, {
-      waitUntil: 'domcontentloaded',
-    });
+    const client = new DigestClient(this.user, this.password, { algorithm: 'MD5' });
+    const response = await client.fetch(`http://${this.host}/page/electricflow/111`);
+    const body = await response.text();
 
-    const bodyHandle = await this.page.$('body');
-    const html = await this.page.evaluate((body) => body?.innerHTML, bodyHandle);
-
-    const dom = await new JSDOM(html);
+    const dom = await new JSDOM(body);
     const document = dom.window.document;
 
     const totalGenerationPowerKW: MetricsElement = {
@@ -98,6 +89,8 @@ export class AiSEG2 {
       generationPowerItems,
     };
   }
+
+  async getUsagePowerDetails() {}
 }
 
 class AiSEG2Error extends Error {
