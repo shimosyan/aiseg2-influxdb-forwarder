@@ -16,8 +16,7 @@ async function run() {
     const aiseg2 = new AiSEG2(aiseg2Host, aiseg2User, aiseg2Password);
 
     const powerSummary = await aiseg2.getPowerSummary();
-
-    console.log(now.format('YYYY-MM-DD HH:mm:ss'), powerSummary);
+    console.log(now.format('YYYY-MM-DD HH:mm:ss'), 'powerSummary', powerSummary);
   }
 
   async function interval(microSeconds: number) {

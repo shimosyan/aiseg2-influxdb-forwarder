@@ -55,28 +55,16 @@ export class AiSEG2 {
 
     const generationPowerItems: MetricsElement[] = [];
 
-    const generationPowerItemName1 = document.getElementById('g_d_1_title')?.textContent;
-    if (generationPowerItemName1 !== '') {
-      generationPowerItems.push({
-        name: `${generationPowerItemName1}(W)`,
-        value: this.getNumericValue(document.getElementById('g_d_1_capacity')?.textContent),
-      });
-    }
-
-    const generationPowerItemName2 = document.getElementById('g_d_2_title')?.textContent;
-    if (generationPowerItemName2 !== '') {
-      generationPowerItems.push({
-        name: `${generationPowerItemName2}(W)`,
-        value: this.getNumericValue(document.getElementById('g_d_2_capacity')?.textContent),
-      });
-    }
-
-    const generationPowerItemName3 = document.getElementById('g_d_3_title')?.textContent;
-    if (generationPowerItemName3 !== '') {
-      generationPowerItems.push({
-        name: `${generationPowerItemName3}(W)`,
-        value: this.getNumericValue(document.getElementById('g_d_3_capacity')?.textContent),
-      });
+    for (let index = 1; index <= 3; index++) {
+      const generationPowerItemName = document.getElementById(`g_d_${index}_title`)?.textContent;
+      if (generationPowerItemName !== '') {
+        generationPowerItems.push({
+          name: `${generationPowerItemName}(W)`,
+          value: this.getNumericValue(
+            document.getElementById(`g_d_${index}_capacity`)?.textContent,
+          ),
+        });
+      }
     }
 
     return {
