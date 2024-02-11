@@ -1,1 +1,4 @@
 aiseg
+domcontentloaded
+tsbuildinfo
+codepaths
