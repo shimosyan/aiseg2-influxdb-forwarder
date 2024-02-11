@@ -14,7 +14,6 @@ const debugHeadlessMode = Config.getHeadlessMode();
 
 console.log('aiseg2IpAddress', aiseg2IpAddress);
 console.log('aiseg2User', aiseg2User);
-console.log('aiseg2Password', aiseg2Password);
 console.log('chromePath', chromePath);
 console.log('debugHeadlessMode', debugHeadlessMode);
 
@@ -35,12 +34,12 @@ async function run() {
     console.log(now.format('YYYY-MM-DD HH:mm:ss'), powerSummary);
   }
 
-  const interval = async (microSeconds: number) => {
+  async function interval(microSeconds: number) {
     for (;;) {
       await new Promise((resolve) => setTimeout(resolve, microSeconds));
       await main();
     }
-  };
+  }
 
   //await main();
   await interval(5000);
