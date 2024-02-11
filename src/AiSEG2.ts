@@ -1,6 +1,15 @@
 import { JSDOM } from 'jsdom';
 import DigestClient from 'digest-fetch';
 
+export type PowerSummary = {
+  totalGenerationPowerKW: MetricsElement;
+  totalUsagePowerKW: MetricsElement;
+  totalBalancePowerKW: MetricsElement;
+  detailsGenerationPower: MetricsElement[];
+};
+
+export type DetailUsagePower = MetricsElement[];
+
 type MetricsElement = {
   name: string;
   value: number;
@@ -33,7 +42,7 @@ export class AiSEG2 {
     return Number(array.join(''));
   }
 
-  async getPowerSummary() {
+  async getPowerSummary(): Promise<PowerSummary> {
     const response = await this.client.fetch(`http://${this.host}/page/electricflow/111`);
     const body = await response.text();
 
@@ -53,12 +62,12 @@ export class AiSEG2 {
       value: totalGenerationPowerKW.value - totalUsagePowerKW.value,
     };
 
-    const generationPowerItems: MetricsElement[] = [];
+    const detailsGenerationPower: MetricsElement[] = [];
 
     for (let index = 1; index <= 3; index++) {
       const generationPowerItemName = document.getElementById(`g_d_${index}_title`)?.textContent;
       if (generationPowerItemName !== '') {
-        generationPowerItems.push({
+        detailsGenerationPower.push({
           name: `${generationPowerItemName}(W)`,
           value: this.getNumericValue(
             document.getElementById(`g_d_${index}_capacity`)?.textContent,
@@ -71,11 +80,11 @@ export class AiSEG2 {
       totalGenerationPowerKW,
       totalUsagePowerKW,
       totalBalancePowerKW,
-      generationPowerItems,
+      detailsGenerationPower,
     };
   }
 
-  async getUsagePowerDetails() {
+  async getDetailsUsagePower(): Promise<DetailUsagePower> {
     let pageEndCheck: string = '';
     let pageCount = 1;
     const maxCount = 20;

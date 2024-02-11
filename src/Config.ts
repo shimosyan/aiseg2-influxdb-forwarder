@@ -30,6 +30,22 @@ export class Config {
   static getAisegPassword(envName = 'AISEG2_PASSWORD') {
     return Config.getEnvValue(envName);
   }
+
+  static getInfluxdbHost(envName = 'INFLUXDB_HOST') {
+    return Config.getEnvValue(envName);
+  }
+
+  static getInfluxdbToken(envName = 'INFLUXDB_TOKEN') {
+    return Config.getEnvValue(envName);
+  }
+
+  static getInfluxdbOrg(envName = 'INFLUXDB_ORG') {
+    return Config.getEnvValue(envName);
+  }
+
+  static getInfluxdbBucket(envName = 'INFLUXDB_BUCKET') {
+    return Config.getEnvValue(envName);
+  }
 }
 
 class ConfigError extends Error {
