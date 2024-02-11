@@ -46,7 +46,7 @@
   "dependencies": {
     "dayjs": "^1.11.10",
     "digest-fetch": "^2.0.3",
-    "forever": "^4.0.3",
+    "forever": "^0.14.2",
     "jsdom": "^24.0.0",
     "node-fetch": "^2.7.0"
   }
