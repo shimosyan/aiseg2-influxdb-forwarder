@@ -57,6 +57,12 @@ git clone https://github.com/shimosyan/aiseg2-influxdb.git
 cd ./aiseg2-influxdb
 ```
 
+依存パッケージをインストールします。
+
+```sh
+npm ci
+```
+
 設定ファイル（`.env`）をサンプルファイルからコピーしてご利用の環境に合わせて設定値を入れます。
 
 ```sh
