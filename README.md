@@ -83,3 +83,25 @@ npm stop
 ```
 
 ただし、環境によってはうまく動かないので `npm run script` を `systemd` 化するなど適宜対応してください。
+
+#### `systemd` のサンプルファイル
+
+`/etc/systemd/system/aiseg2-influxdb.service`
+
+```ini
+[Unit]
+Description=aiseg2-influxdb
+After=syslog.target network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/npm run script
+WorkingDirectory=/home/ec2-user/aiseg2-influxdb
+KillMode=process
+Restart=always
+User=ec2-user
+Group=ec2-user
+
+[Install]
+WantedBy=multi-user.target
+```
