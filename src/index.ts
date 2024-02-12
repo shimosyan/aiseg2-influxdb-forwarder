@@ -8,6 +8,7 @@ Config.checkEnvFile();
 const aiseg2Host = Config.getAisegHost();
 const aiseg2User = Config.getAisegUser();
 const aiseg2Password = Config.getAisegPassword();
+const aiseg2UseHTTPS = Config.getAisegUseHTTPS();
 
 const influxdbHost = Config.getInfluxdbHost();
 const influxdbToken = Config.getInfluxdbToken();
@@ -16,6 +17,7 @@ const influxdbBucket = Config.getInfluxdbBucket();
 
 console.log('aiseg2Host', aiseg2Host);
 console.log('aiseg2User', aiseg2User);
+console.log('aiseg2UseHTTPS', aiseg2UseHTTPS);
 console.log('influxdbHost', influxdbHost);
 console.log('influxdbOrg', influxdbOrg);
 console.log('influxdbBucket', influxdbBucket);
@@ -23,7 +25,7 @@ console.log('influxdbBucket', influxdbBucket);
 async function run() {
   async function main(now = dayjs()) {
     // AiSEG2 からデータを取得
-    const aiseg2 = new AiSEG2(aiseg2Host, aiseg2User, aiseg2Password);
+    const aiseg2 = new AiSEG2(aiseg2Host, aiseg2User, aiseg2Password, aiseg2UseHTTPS);
 
     const powerSummary = await aiseg2.getPowerSummary();
     console.log(now.format('YYYY-MM-DD HH:mm:ss'), 'powerSummary', powerSummary);

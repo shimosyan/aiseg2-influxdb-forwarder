@@ -17,9 +17,10 @@ type MetricsElement = {
 
 export class AiSEG2 {
   private readonly host: string;
+  private readonly useHTTPS: boolean;
   private readonly client: DigestClient;
 
-  constructor(host: string, user: string, password: string) {
+  constructor(host: string, user: string, password: string, useHTTPS = false) {
     if (host === '') {
       throw new AiSEG2Error('AiSEG2 のホストが指定されていません。');
     }
@@ -31,6 +32,7 @@ export class AiSEG2 {
     }
 
     this.host = host;
+    this.useHTTPS = useHTTPS;
     this.client = new DigestClient(user, password, { algorithm: 'MD5' });
   }
 
@@ -43,7 +45,9 @@ export class AiSEG2 {
   }
 
   async getPowerSummary(): Promise<PowerSummary> {
-    const response = await this.client.fetch(`http://${this.host}/page/electricflow/111`);
+    const response = await this.client.fetch(
+      `${this.useHTTPS ? 'https' : 'http'}://${this.host}/page/electricflow/111`,
+    );
     const body = await response.text();
 
     const dom = await new JSDOM(body);
@@ -93,7 +97,7 @@ export class AiSEG2 {
 
     do {
       const response = await this.client.fetch(
-        `http://${this.host}/page/electricflow/1113?id=${pageCount}`,
+        `${this.useHTTPS ? 'https' : 'http'}://${this.host}/page/electricflow/1113?id=${pageCount}`,
       );
       const body = await response.text();
 

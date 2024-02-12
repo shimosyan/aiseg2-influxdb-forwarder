@@ -31,6 +31,10 @@ export class Config {
     return Config.getEnvValue(envName);
   }
 
+  static getAisegUseHTTPS(envName = 'AISEG2_USE_HTTPS') {
+    return process.env[envName] === '1';
+  }
+
   static getInfluxdbHost(envName = 'INFLUXDB_HOST') {
     return Config.getEnvValue(envName);
   }
