@@ -1,6 +1,6 @@
 # aiseg2-influxdb
 
-パナソニック製の AiSEG2 から利用できる Web インターフェースから各情報をスクレイピングして influxdb に投入するツールです。
+パナソニック製の AiSEG2 から利用できる Web インターフェースにある各情報をスクレイピングして influxdb に投入するツールです。
 
 後述の通りすべての環境で動作を保証していないので自己責任です。
 
@@ -57,7 +57,7 @@ git clone https://github.com/shimosyan/aiseg2-influxdb.git
 cd ./aiseg2-influxdb
 ```
 
-設定ファイル（`.env`）をサンプルファイルコピーしてご利用の環境に合わせて設定値を入れます。
+設定ファイル（`.env`）をサンプルファイルからコピーしてご利用の環境に合わせて設定値を入れます。
 
 ```sh
 cp .env.sample .env
