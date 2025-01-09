@@ -3,8 +3,8 @@ import { PowerSummary, DetailUsagePower } from './AiSEG2';
 
 export class Influx {
   private readonly writeClient: WriteApi;
-  constructor(host: string, token: string, orgName: string, bucketName: string) {
-    const url = `http://${host}`;
+  constructor(host: string, token: string, orgName: string, bucketName: string, useHTTPS: boolean) {
+    const url = `${useHTTPS ? 'https' : 'http'}://${host}`;
 
     const client = new InfluxDB({ url, token });
     this.writeClient = client.getWriteApi(orgName, bucketName, 'ns');

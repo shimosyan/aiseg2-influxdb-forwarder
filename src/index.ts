@@ -14,6 +14,7 @@ const influxdbHost = Config.getInfluxdbHost();
 const influxdbToken = Config.getInfluxdbToken();
 const influxdbOrg = Config.getInfluxdbOrg();
 const influxdbBucket = Config.getInfluxdbBucket();
+const influxdbUseHTTPS = Config.getInfluxdbUseHTTPS();
 
 console.log('aiseg2Host', aiseg2Host);
 console.log('aiseg2User', aiseg2User);
@@ -21,6 +22,7 @@ console.log('aiseg2UseHTTPS', aiseg2UseHTTPS);
 console.log('influxdbHost', influxdbHost);
 console.log('influxdbOrg', influxdbOrg);
 console.log('influxdbBucket', influxdbBucket);
+console.log('influxdbUseHTTPS', influxdbUseHTTPS);
 
 async function run() {
   async function main(now = dayjs()) {
@@ -34,7 +36,13 @@ async function run() {
     console.log(now.format('YYYY-MM-DD HH:mm:ss'), 'detailsUsagePower', detailsUsagePower);
 
     // influxdb へデータを送信
-    const influx = new Influx(influxdbHost, influxdbToken, influxdbOrg, influxdbBucket);
+    const influx = new Influx(
+      influxdbHost,
+      influxdbToken,
+      influxdbOrg,
+      influxdbBucket,
+      influxdbUseHTTPS,
+    );
     influx.writePower(powerSummary, detailsUsagePower);
   }
 

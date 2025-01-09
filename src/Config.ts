@@ -50,6 +50,9 @@ export class Config {
   static getInfluxdbBucket(envName = 'INFLUXDB_BUCKET') {
     return Config.getEnvValue(envName);
   }
+  static getInfluxdbUseHTTPS(envName = 'INFLUXDB_USE_HTTPS') {
+    return process.env[envName] === '1';
+  }
 }
 
 class ConfigError extends Error {
