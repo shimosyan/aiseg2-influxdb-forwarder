@@ -45,7 +45,8 @@
       "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)以降"],
       "depNameTemplate": "golang/go",
       "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^go(?<version>.*)$"
+      "extractVersionTemplate": "^go(?<version>\\d+\\.\\d+)",
+      "versioningTemplate": "loose"
     },
     {
       "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
@@ -54,14 +55,16 @@
       ],
       "depNameTemplate": "golang/go",
       "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^go(?<version>.*)$"
+      "extractVersionTemplate": "^go(?<version>\\d+\\.\\d+)",
+      "versioningTemplate": "loose"
     },
     {
       "fileMatch": ["^\\.github/pull_request_template\\.md$"],
       "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)\\+ で動作する"],
       "depNameTemplate": "golang/go",
       "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^go(?<version>.*)$"
+      "extractVersionTemplate": "^go(?<version>\\d+\\.\\d+)",
+      "versioningTemplate": "loose"
     }
   ],
   "schedule": [
