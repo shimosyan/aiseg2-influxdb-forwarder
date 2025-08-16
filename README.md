@@ -95,12 +95,18 @@ Docker Composeで起動します。
 
 ```bash
 # ビルドと起動
+docker compose up -d
+# または
 docker-compose up -d
 
 # ログ確認
+docker compose logs -f
+# または
 docker-compose logs -f
 
 # 停止
+docker compose down
+# または
 docker-compose down
 ```
 
@@ -132,6 +138,8 @@ go build -o aiseg2-forwarder ./cmd/aiseg2-forwarder
 
 ```bash
 # Docker Composeの場合
+docker compose logs -f aiseg2-forwarder
+# または
 docker-compose logs -f aiseg2-forwarder
 
 # Dockerの場合
@@ -142,6 +150,8 @@ docker logs -f aiseg2-forwarder
 
 ```bash
 # コンテナの状態確認
+docker compose ps
+# または
 docker-compose ps
 ```
 
@@ -159,7 +169,7 @@ docker-compose ps
 
 3. **コンテナが起動しない**
    - `.env`ファイルの設定確認
-   - Docker Composeログの確認: `docker-compose logs`
+   - Docker Composeログの確認: `docker compose logs` または `docker-compose logs`
 
 ## 旧バージョン（Node.js版）からの移行
 
