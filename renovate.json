@@ -13,6 +13,7 @@
       "matchPackageNames": [
         "go",
         "golang",
+        "golang/go",
         "actions/setup-go"
       ],
       "addLabels": ["go-version"],
@@ -42,22 +43,22 @@
     {
       "fileMatch": ["^README\\.md$"],
       "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)以降"],
-      "depNameTemplate": "go",
-      "datasourceTemplate": "golang-version"
+      "depNameTemplate": "golang/go",
+      "datasourceTemplate": "github-releases"
     },
     {
       "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
       "matchStrings": [
         "- (?<currentValue>\\d+\\.\\d+)\\.x"
       ],
-      "depNameTemplate": "go",
-      "datasourceTemplate": "golang-version"
+      "depNameTemplate": "golang/go",
+      "datasourceTemplate": "github-releases"
     },
     {
       "fileMatch": ["^\\.github/pull_request_template\\.md$"],
       "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)\\+ で動作する"],
-      "depNameTemplate": "go",
-      "datasourceTemplate": "golang-version"
+      "depNameTemplate": "golang/go",
+      "datasourceTemplate": "github-releases"
     }
   ],
   "schedule": [
