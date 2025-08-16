@@ -125,10 +125,10 @@ func (c *Client) GetPowerSummary() (*PowerSummary, error) {
 	}
 
 	return &PowerSummary{
-		TotalGenerationPowerKW:  totalGenerationPowerKW,
-		TotalUsagePowerKW:       totalUsagePowerKW,
-		TotalBalancePowerKW:     totalBalancePowerKW,
-		DetailsGenerationPower:  detailsGenerationPower,
+		TotalGenerationPowerKW: totalGenerationPowerKW,
+		TotalUsagePowerKW:      totalUsagePowerKW,
+		TotalBalancePowerKW:    totalBalancePowerKW,
+		DetailsGenerationPower: detailsGenerationPower,
 	}, nil
 }
 
@@ -174,7 +174,7 @@ func (c *Client) GetDetailsUsagePower() (DetailUsagePower, error) {
 		for i := 1; i <= 10; i++ {
 			deviceSelector := fmt.Sprintf("#stage_%d > div.c_device", i)
 			valueSelector := fmt.Sprintf("#stage_%d > div.c_value", i)
-			
+
 			name := strings.TrimSpace(doc.Find(deviceSelector).Text())
 			if name == "" {
 				continue
