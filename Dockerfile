@@ -14,6 +14,11 @@ RUN go mod download
 # ソースコードをコピー
 COPY . .
 
+# デバッグ: ディレクトリ構造を確認
+RUN ls -la
+RUN ls -la cmd/
+RUN ls -la cmd/aiseg2-forwarder/
+
 # バイナリをビルド
 RUN CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o aiseg2-forwarder ./cmd/aiseg2-forwarder
 
