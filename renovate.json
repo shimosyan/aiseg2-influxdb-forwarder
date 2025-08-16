@@ -59,6 +59,14 @@
       "datasourceTemplate": "golang-version",
       "versioningTemplate": "semver",
       "groupName": "Go version updates"
+    },
+    {
+      "fileMatch": ["^\\.github/pull_request_template\\.md$"],
+      "matchStrings": ["- \\[ \\] Go (?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)\\+ で動作する"],
+      "depNameTemplate": "go",
+      "datasourceTemplate": "golang-version",
+      "versioningTemplate": "semver",
+      "groupName": "Go version updates"
     }
   ],
   "schedule": [
