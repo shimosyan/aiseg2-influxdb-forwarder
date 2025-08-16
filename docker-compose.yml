@@ -1,0 +1,34 @@
+version: '3.8'
+
+services:
+  aiseg2-forwarder:
+    build: .
+    container_name: aiseg2-forwarder
+    restart: unless-stopped
+
+    # 環境変数（.envファイルから読み込み）
+    env_file:
+      - .env
+
+    # ログ設定
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+    # ヘルスチェック
+    healthcheck:
+      test: ["CMD", "pgrep", "-f", "aiseg2-forwarder"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+    # ネットワーク設定（必要に応じてカスタマイズ）
+    networks:
+      - aiseg2-network
+
+networks:
+  aiseg2-network:
+    driver: bridge

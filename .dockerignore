@@ -1,0 +1,42 @@
+# Git関連
+.git
+.gitignore
+.gitattributes
+
+# ドキュメント
+README.md
+*.md
+
+# 環境設定ファイル
+.env
+.env.local
+.env.*.local
+
+# Node.js関連（旧実装）
+node_modules
+package.json
+package-lock.json
+tsconfig.json
+jest.config.js
+prettier.config.js
+
+# TypeScript関連（旧実装）
+src/
+*.ts
+*.js
+
+# VS Code
+.vscode/
+
+# ビルド成果物
+aiseg2-forwarder
+*.exe
+
+# テスト関連
+coverage/
+*.test
+*.prof
+
+# その他
+.DS_Store
+Thumbs.db

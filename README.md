@@ -1,18 +1,32 @@
-# aiseg2-influxdb
+# AiSEG2 InfluxDB Forwarder
 
-パナソニック製の AiSEG2 から利用できる Web インターフェースにある各情報をスクレイピングして influxdb に投入するツールです。
+Panasonic製スマートホームコントローラー「AiSEG2」から電力メトリクスを取得し、InfluxDBに転送するGoアプリケーションです。
 
 後述の通りすべての環境で動作を保証していないので自己責任です。
 
+## 特徴
+
+- **高い安定性**: Go言語による長期間稼働に適した実装（旧Node.js版のメモリリーク問題を解決）
+- **軽量**: 単一バイナリによる軽量な実行環境
+- **Docker対応**: コンテナ化による簡単なデプロイメント
+- **構造化ログ**: JSON形式のログによる監視性向上
+
 ## 動作環境
 
-このツールを使用するには、動作環境にて Node.js のインストール及び、Web操作が可能な AiSEG2端末が必要です。
+このツールを使用するには、以下のいずれかの環境が必要です：
+
+### Docker環境（推奨）
+
+- Docker & Docker Compose
+- Web操作が可能なAiSEG2端末
+
+### ローカル実行環境
+
+- Go 1.21以降
+- Web操作が可能なAiSEG2端末
 
 下記環境で動作確認をしています。作者自宅の機材でしか動作確認していないため、それ以外の環境の動作は保証できません。
 
-- 実行環境
-  - Ubuntu `22.04`
-  - Node.js `20.11.0`
 - AiSEG2
   - 本体型番 `MKN713`
   - ファームウェア `Ver.2.97I-01`
@@ -39,76 +53,121 @@ AiSEG2 はそのままでは HTTP しか喋らないため、LAN など境界内
 
 ### 事前準備
 
-1. ツールを動かすホスト環境に Git 及び Node.js を導入してください。
-2. AiSEG2 の IPアドレスを固定化してください。
-3. influxdb に格納先となる Bucket を用意してください。
+1. AiSEG2 の IPアドレスを固定化してください。
+2. influxdb に格納先となる Bucket を用意してください。
+3. Docker環境（推奨）またはGo言語実行環境を用意してください。
 
-### ツールのインストール
+### 1. 環境変数の設定
 
-ホスト環境の適当な作業ディレクトリで本リポジトリをクローンします。
+`.env.example`をコピーして`.env`ファイルを作成し、環境に合わせて設定してください：
 
-```sh
-git clone https://github.com/shimosyan/aiseg2-influxdb.git
+```bash
+cp .env.example .env
 ```
 
-リポジトリ内に入ります。
+`.env`ファイルの設定項目：
 
-```sh
-cd ./aiseg2-influxdb
+```bash
+# AiSEG2 設定
+AISEG2_HOST=192.168.1.100
+AISEG2_USER=your_username
+AISEG2_PASSWORD=your_password
+AISEG2_USE_HTTPS=0
+
+# InfluxDB 設定
+INFLUXDB_HOST=192.168.1.200:8086
+INFLUXDB_TOKEN=your_influxdb_token
+INFLUXDB_ORG=your_organization
+INFLUXDB_BUCKET=your_bucket
+INFLUXDB_USE_HTTPS=0
 ```
 
-依存パッケージをインストールします。
+### 2. Docker Composeでの実行（推奨）
 
-```sh
-npm ci
+リポジトリをクローンします。
+
+```bash
+git clone https://github.com/shimosyan/aiseg2-influxdb-forwarder.git
+cd aiseg2-influxdb-forwarder
 ```
 
-設定ファイル（`.env`）をサンプルファイルからコピーしてご利用の環境に合わせて設定値を入れます。
+Docker Composeで起動します。
 
-```sh
-cp .env.sample .env
-```
+```bash
+# ビルドと起動
+docker-compose up -d
 
-### ツールの起動
-
-以下のコマンドで起動することができます。
-
-```sh
-npm run script
-```
-
-### ツールのデーモン化について
-
-下記コマンドで Node.js の [forever](https://www.npmjs.com/package/forever) ライブラリを使ったデーモン化ができます
-
-```sh
-# 開始
-npm start
+# ログ確認
+docker-compose logs -f
 
 # 停止
-npm stop
+docker-compose down
 ```
 
-ただし、環境によってはうまく動かないので `npm run script` を `systemd` 化するなど適宜対応してください。
+### 3. ローカルビルドでの実行
 
-#### `systemd` のサンプルファイル
+リポジトリをクローンします。
 
-`/etc/systemd/system/aiseg2-influxdb.service`
-
-```ini
-[Unit]
-Description=aiseg2-influxdb
-After=syslog.target network.target
-
-[Service]
-Type=simple
-ExecStart=/usr/bin/npm run script
-WorkingDirectory=/home/ec2-user/aiseg2-influxdb
-KillMode=process
-Restart=always
-User=ec2-user
-Group=ec2-user
-
-[Install]
-WantedBy=multi-user.target
+```bash
+git clone https://github.com/shimosyan/aiseg2-influxdb-forwarder.git
+cd aiseg2-influxdb-forwarder
 ```
+
+依存関係をインストールしてビルドします。
+
+```bash
+# 依存関係のインストール
+go mod download
+
+# ビルド
+go build -o aiseg2-forwarder ./cmd/aiseg2-forwarder
+
+# 実行
+./aiseg2-forwarder
+```
+
+## 監視とトラブルシューティング
+
+### ログ確認
+
+```bash
+# Docker Composeの場合
+docker-compose logs -f aiseg2-forwarder
+
+# Dockerの場合
+docker logs -f aiseg2-forwarder
+```
+
+### ヘルスチェック
+
+```bash
+# コンテナの状態確認
+docker-compose ps
+```
+
+### よくある問題
+
+1. **AiSEG2への接続エラー**
+   - ネットワーク接続を確認
+   - ホスト名とポート番号の確認
+   - Digest認証の認証情報確認
+
+2. **InfluxDBへの書き込みエラー**
+   - InfluxDBサーバーの稼働状況確認
+   - トークンと権限の確認
+   - ネットワーク接続の確認
+
+3. **コンテナが起動しない**
+   - `.env`ファイルの設定確認
+   - Docker Composeログの確認: `docker-compose logs`
+
+## 旧バージョン（Node.js版）からの移行
+
+このプロジェクトはNode.js + TypeScriptからGo言語に移行されました。主な変更点：
+
+- **安定性の向上**: メモリリーク問題の解決
+- **デプロイの簡素化**: 単一バイナリとコンテナ化
+- **パフォーマンス向上**: 高速起動と低メモリ使用量
+- **監視性の向上**: 構造化ログとヘルスチェック
+
+旧バージョンの設定ファイル（.env）はそのまま利用可能です。
