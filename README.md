@@ -178,7 +178,7 @@ docker-compose ps
    - Docker環境の場合：
      - ホストマシンのInfluxDBに接続する場合は `INFLUXDB_HOST=host.docker.internal:8086` を使用
      - Linux環境で `host.docker.internal` が解決できない場合は、ホストマシンのIPアドレスを直接指定
-     - `docker-compose.yml` に `extra_hosts` が設定されていることを確認
+     - `docker-compose.yaml` に `extra_hosts` が設定されていることを確認
 
 3. **コンテナが起動しない**
    - `.env`ファイルの設定確認
@@ -213,8 +213,8 @@ Docker環境からホストマシン上のサービス（InfluxDBやAiSEG2）に
    INFLUXDB_HOST=172.17.0.1:8086  # 例
    ```
 
-3. **docker-compose.ymlの設定**
-   - 本プロジェクトの `docker-compose.yml` には既に `extra_hosts` が設定済み
+3. **docker-compose.yamlの設定**
+   - 本プロジェクトの `docker-compose.yaml` には既に `extra_hosts` が設定済み
    - これにより `host.docker.internal` が正しく解決されます
 
 ## 旧バージョン（Node.js版）からの移行
