@@ -38,14 +38,16 @@
       "matchStrings": ["FROM golang:(?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)-alpine"],
       "depNameTemplate": "golang",
       "datasourceTemplate": "docker",
-      "versioningTemplate": "semver"
+      "versioningTemplate": "semver",
+      "groupName": "Go version updates"
     },
     {
       "fileMatch": ["^README\\.md$"],
       "matchStrings": ["- Go (?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)以降"],
       "depNameTemplate": "go",
       "datasourceTemplate": "golang-version",
-      "versioningTemplate": "semver"
+      "versioningTemplate": "semver",
+      "groupName": "Go version updates"
     },
     {
       "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
@@ -55,7 +57,16 @@
       ],
       "depNameTemplate": "go",
       "datasourceTemplate": "golang-version",
-      "versioningTemplate": "semver"
+      "versioningTemplate": "semver",
+      "groupName": "Go version updates"
+    },
+    {
+      "fileMatch": ["^\\.github/pull_request_template\\.md$"],
+      "matchStrings": ["- \\[ \\] Go (?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)\\+ で動作する"],
+      "depNameTemplate": "go",
+      "datasourceTemplate": "golang-version",
+      "versioningTemplate": "semver",
+      "groupName": "Go version updates"
     }
   ],
   "schedule": [
