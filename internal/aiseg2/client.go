@@ -125,10 +125,10 @@ func (c *Client) GetPowerSummary() (*PowerSummary, error) {
 	}
 
 	return &PowerSummary{
-		TotalGenerationPowerKW:  totalGenerationPowerKW,
-		TotalUsagePowerKW:       totalUsagePowerKW,
-		TotalBalancePowerKW:     totalBalancePowerKW,
-		DetailsGenerationPower:  detailsGenerationPower,
+		TotalGenerationPowerKW: totalGenerationPowerKW,
+		TotalUsagePowerKW:      totalUsagePowerKW,
+		TotalBalancePowerKW:    totalBalancePowerKW,
+		DetailsGenerationPower: detailsGenerationPower,
 	}, nil
 }
 
@@ -140,7 +140,7 @@ func (c *Client) GetDetailsUsagePower() (DetailUsagePower, error) {
 
 	for pageCount := 1; pageCount <= maxCount; pageCount++ {
 		url := c.getURL(fmt.Sprintf("/page/electricflow/1113?id=%d", pageCount))
-		
+
 		resp, err := c.client.Get(url)
 		if err != nil {
 			return nil, fmt.Errorf("AiSEG2への接続に失敗しました: %w", err)
@@ -174,7 +174,7 @@ func (c *Client) GetDetailsUsagePower() (DetailUsagePower, error) {
 		for i := 1; i <= 10; i++ {
 			deviceSelector := fmt.Sprintf("#stage_%d > div.c_device", i)
 			valueSelector := fmt.Sprintf("#stage_%d > div.c_value", i)
-			
+
 			name := strings.TrimSpace(doc.Find(deviceSelector).Text())
 			if name == "" {
 				continue

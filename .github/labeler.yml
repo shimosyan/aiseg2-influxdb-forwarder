@@ -1,0 +1,69 @@
+# 設定ファイル関連
+"area/env":
+  - changed-files:
+    - any-glob-to-any-file:
+      - .env.example
+
+# エントリポイントファイル関連
+"area/cmd":
+  - changed-files:
+    - any-glob-to-any-file:
+      - cmd/**/*
+
+# AiSEG関連
+"area/aiseg":
+  - changed-files:
+    - any-glob-to-any-file:
+      - internal/aiseg2/**/*
+
+# Config関連
+"area/config":
+  - changed-files:
+    - any-glob-to-any-file:
+      - internal/config/**/*
+
+# InfluxDB関連
+"area/influx":
+  - changed-files:
+    - any-glob-to-any-file:
+      - internal/influx/**/*
+
+# Internal関連
+"area/internal":
+  - changed-files:
+    - any-glob-to-any-file:
+      - internal/**/*
+
+# logger関連
+"area/logger":
+  - changed-files:
+    - any-glob-to-any-file:
+      - logger/**/*
+
+# pkg関連
+"area/pkg":
+  - changed-files:
+    - any-glob-to-any-file:
+      - pkg/**/*
+
+# Docker関連
+"area/docker":
+  - changed-files:
+    - any-glob-to-any-file:
+      - docker/**/*
+      - docker-compose.yaml
+      - Dockerfile
+
+# ドキュメント関連
+"area/documentation":
+  - changed-files:
+    - any-glob-to-any-file:
+      - "*.md"
+      - docs/**/*
+
+# CI/CD関連
+"area/ci":
+  - changed-files:
+    - any-glob-to-any-file:
+      - .github/**/*
+

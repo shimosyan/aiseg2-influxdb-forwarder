@@ -2,10 +2,10 @@ package aiseg2
 
 // PowerSummary は電力サマリー情報を保持します
 type PowerSummary struct {
-	TotalGenerationPowerKW  MetricsElement   `json:"totalGenerationPowerKW"`
-	TotalUsagePowerKW       MetricsElement   `json:"totalUsagePowerKW"`
-	TotalBalancePowerKW     MetricsElement   `json:"totalBalancePowerKW"`
-	DetailsGenerationPower  []MetricsElement `json:"detailsGenerationPower"`
+	TotalGenerationPowerKW MetricsElement   `json:"totalGenerationPowerKW"`
+	TotalUsagePowerKW      MetricsElement   `json:"totalUsagePowerKW"`
+	TotalBalancePowerKW    MetricsElement   `json:"totalBalancePowerKW"`
+	DetailsGenerationPower []MetricsElement `json:"detailsGenerationPower"`
 }
 
 // DetailUsagePower は詳細消費電力情報を保持します
