@@ -1,5 +1,5 @@
 # マルチステージビルドを使用して軽量なイメージを作成
-FROM golang:1.23-alpine AS builder
+FROM golang:1.25-alpine AS builder
 
 # 必要なパッケージをインストール
 RUN apk add --no-cache git ca-certificates
