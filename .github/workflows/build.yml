@@ -1,0 +1,118 @@
+name: Build and Test
+
+on:
+  pull_request:
+    branches:
+      - main
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}  # デプロイしないため PR レベルの排他制御
+  cancel-in-progress: true # PR の更新があった場合は前のジョブをキャンセルする
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        go-version:
+          - 1.23.x
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4.3.0
+
+      - uses: aquaproj/aqua-installer@d1fe50798dbadd4eb5b98957290ca175f6b4870f # v4.0.2
+        with:
+          aqua_version: v2.53.9
+
+      - run: github-comment exec -- github-comment hide
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Go
+        uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+        with:
+          go-version: ${{ matrix.go-version }}
+
+      - name: Cache Go modules
+        uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
+        with:
+          path: |
+            ~/.cache/go-build
+            ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: Download dependencies
+        run: |
+          github-comment exec -k common-error -var title:"Mod Download Failed (Go: ${{ matrix.go-version }})" -- go mod download
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Verify dependencies
+        run: |
+          github-comment exec -k common-error -var title:"Mod Verify Failed (Go: ${{ matrix.go-version }})" -- go mod verify
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build application
+        run: |
+          github-comment exec -k common-error -var title:"Build Failed (Go: ${{ matrix.go-version }})" -- go build -v ./cmd/aiseg2-forwarder
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Check Go formatting
+        run: |
+          if [ "$(gofmt -s -l . | wc -l)" -gt 0 ]; then
+            RESULT=$(gofmt -s -l .)
+            github-comment post -k common-error -var title:"The following files are not properly formatted: (Go: ${{ matrix.go-version }})" -var body:"$RESULT"
+            exit 1
+          fi
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run go vet
+        run: |
+          github-comment exec -k common-error -var title:"Vet Failed (Go: ${{ matrix.go-version }})" -- go vet ./...
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run tests (if any)
+        run: |
+          github-comment exec -k common-error -var title:"Test Failed (Go: ${{ matrix.go-version }})" -- go test -v ./...
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@e468171a9de216ec08956ac3ada2f0791b6bd435 # v3.11.1
+
+      - name: Build Docker image
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        with:
+          context: .
+          push: false
+          tags: aiseg2-forwarder:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Docker image
+        run: |
+          github-comment exec -k common-error -var title:"Docker image built (Go: ${{ matrix.go-version }})" -- docker images aiseg2-forwarder:test --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  success:
+    needs:
+      - build-and-test
+    if: ${{ !failure() }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: echo "Success!!"
