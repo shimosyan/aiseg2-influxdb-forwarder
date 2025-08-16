@@ -35,34 +35,29 @@
   "regexManagers": [
     {
       "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["FROM golang:(?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)-alpine"],
+      "matchStrings": ["FROM golang:(?<currentValue>\\d+\\.\\d+)-alpine"],
       "depNameTemplate": "golang",
-      "datasourceTemplate": "docker",
-      "versioningTemplate": "semver"
+      "datasourceTemplate": "docker"
     },
     {
       "fileMatch": ["^README\\.md$"],
-      "matchStrings": ["- Go (?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)以降"],
+      "matchStrings": ["- Go (?<currentValue>\\d+\\.\\d+)以降"],
       "depNameTemplate": "go",
-      "datasourceTemplate": "golang-version",
-      "versioningTemplate": "semver"
+      "datasourceTemplate": "golang-version"
     },
     {
       "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
       "matchStrings": [
-        "go-version:\\s*\\n\\s*-\\s*(?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)(?:\\.x)?",
-        "go-version:\\s*(?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)(?:\\.x)?"
+        "go-version:\\s*\\n\\s*-\\s*(?<currentValue>\\d+\\.\\d+)(?:\\.x)?"
       ],
       "depNameTemplate": "go",
-      "datasourceTemplate": "golang-version",
-      "versioningTemplate": "semver"
+      "datasourceTemplate": "golang-version"
     },
     {
       "fileMatch": ["^\\.github/pull_request_template\\.md$"],
-      "matchStrings": ["- \\[ \\] Go (?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)\\+ で動作する"],
+      "matchStrings": ["- \\[ \\] Go (?<currentValue>\\d+\\.\\d+)\\+ で動作する"],
       "depNameTemplate": "go",
-      "datasourceTemplate": "golang-version",
-      "versioningTemplate": "semver"
+      "datasourceTemplate": "golang-version"
     }
   ],
   "schedule": [
