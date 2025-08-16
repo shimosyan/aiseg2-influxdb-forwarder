@@ -17,11 +17,7 @@
         "actions/setup-go"
       ],
       "addLabels": ["go-version"],
-      "commitMessage": {
-        "prefix": "chore(go):",
-        "topic": "Go version",
-        "subject": "update to {{newVersion}}"
-      },
+      "commitMessage": "chore(go): update Go version to {{newVersion}}",
       "automerge": false
     },
     {
