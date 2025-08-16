@@ -3,7 +3,7 @@ Thumbs.db
 .vscode
 
 # Go language build artifacts
-aiseg2-forwarder
+/aiseg2-forwarder
 aiseg2-forwarder.exe
 aiseg2-forwarder-*
 *.exe
