@@ -10,6 +10,10 @@ services:
     env_file:
       - .env
 
+    # ホストへの接続設定
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
     # ログ設定
     logging:
       driver: "json-file"
