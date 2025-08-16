@@ -82,6 +82,15 @@ INFLUXDB_BUCKET=your_bucket
 INFLUXDB_USE_HTTPS=0
 ```
 
+**Docker環境でホストマシンのInfluxDBに接続する場合：**
+
+ホストマシンで動作しているInfluxDBに接続する場合は、`INFLUXDB_HOST`を以下のように設定してください：
+
+```bash
+# Docker環境からホストマシンのInfluxDBに接続
+INFLUXDB_HOST=host.docker.internal:8086
+```
+
 ### 2. Docker Composeでの実行（推奨）
 
 リポジトリをクローンします。
@@ -166,10 +175,47 @@ docker-compose ps
    - InfluxDBサーバーの稼働状況確認
    - トークンと権限の確認
    - ネットワーク接続の確認
+   - Docker環境の場合：
+     - ホストマシンのInfluxDBに接続する場合は `INFLUXDB_HOST=host.docker.internal:8086` を使用
+     - Linux環境で `host.docker.internal` が解決できない場合は、ホストマシンのIPアドレスを直接指定
+     - `docker-compose.yml` に `extra_hosts` が設定されていることを確認
 
 3. **コンテナが起動しない**
    - `.env`ファイルの設定確認
    - Docker Composeログの確認: `docker compose logs` または `docker-compose logs`
+
+### Docker環境での特記事項
+
+**ホストマシンへの接続について：**
+
+Docker環境からホストマシン上のサービス（InfluxDBやAiSEG2）に接続する場合、以下の点にご注意ください：
+
+1. **host.docker.internal の使用**
+
+   ```bash
+   # ホストマシンのInfluxDBに接続する場合
+   INFLUXDB_HOST=host.docker.internal:8086
+   ```
+
+2. **Linux環境での対応**
+   - `host.docker.internal` が解決できない場合は、ホストマシンのIPアドレスを確認：
+
+   ```bash
+   # ホストマシンのIPアドレスを確認
+   ip route show default | awk '/default/ {print $3}'
+   # または
+   hostname -I | awk '{print $1}'
+   ```
+
+   - 確認したIPアドレスを直接指定：
+
+   ```bash
+   INFLUXDB_HOST=172.17.0.1:8086  # 例
+   ```
+
+3. **docker-compose.ymlの設定**
+   - 本プロジェクトの `docker-compose.yml` には既に `extra_hosts` が設定済み
+   - これにより `host.docker.internal` が正しく解決されます
 
 ## 旧バージョン（Node.js版）からの移行
 
