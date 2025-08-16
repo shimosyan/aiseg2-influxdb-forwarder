@@ -13,7 +13,6 @@
       "matchPackageNames": [
         "go",
         "golang",
-        "golang/go",
         "actions/setup-go"
       ],
       "addLabels": ["go-version"],
@@ -43,28 +42,22 @@
     {
       "fileMatch": ["^README\\.md$"],
       "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)以降"],
-      "depNameTemplate": "golang/go",
-      "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^go(?<version>\\d+\\.\\d+)",
-      "versioningTemplate": "loose"
+      "depNameTemplate": "golang",
+      "datasourceTemplate": "docker"
     },
     {
       "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
       "matchStrings": [
         "- (?<currentValue>\\d+\\.\\d+)\\.x"
       ],
-      "depNameTemplate": "golang/go",
-      "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^go(?<version>\\d+\\.\\d+)",
-      "versioningTemplate": "loose"
+      "depNameTemplate": "golang",
+      "datasourceTemplate": "docker"
     },
     {
       "fileMatch": ["^\\.github/pull_request_template\\.md$"],
       "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)\\+ で動作する"],
-      "depNameTemplate": "golang/go",
-      "datasourceTemplate": "github-releases",
-      "extractVersionTemplate": "^go(?<version>\\d+\\.\\d+)",
-      "versioningTemplate": "loose"
+      "depNameTemplate": "golang",
+      "datasourceTemplate": "docker"
     }
   ],
   "schedule": [
