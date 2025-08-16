@@ -8,6 +8,20 @@
   "labels": ["renovate"],
   "packageRules": [
     {
+      "groupName": "Go version updates",
+      "matchManagers": ["gomod", "dockerfile", "github-actions"],
+      "matchPackageNames": [
+        "go",
+        "golang",
+        "actions/setup-go"
+      ],
+      "addLabels": ["go-version"],
+      "commitMessagePrefix": "chore(go):",
+      "commitMessageTopic": "Go version",
+      "prTitle": "Update Go version to {{newVersion}}",
+      "automerge": false
+    },
+    {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "automerge": true
     },
@@ -16,6 +30,32 @@
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
       "pinDigests": true,
       "automerge": true
+    }
+  ],
+  "regexManagers": [
+    {
+      "fileMatch": ["^Dockerfile$"],
+      "matchStrings": ["FROM golang:(?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)-alpine"],
+      "depNameTemplate": "golang",
+      "datasourceTemplate": "docker",
+      "versioningTemplate": "semver"
+    },
+    {
+      "fileMatch": ["^README\\.md$"],
+      "matchStrings": ["- Go (?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)以降"],
+      "depNameTemplate": "go",
+      "datasourceTemplate": "golang-version",
+      "versioningTemplate": "semver"
+    },
+    {
+      "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
+      "matchStrings": [
+        "go-version:\\s*\\n\\s*-\\s*(?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)(?:\\.x)?",
+        "go-version:\\s*(?<currentValue>\\d+\\.\\d+(?:\\.\\d+)?)(?:\\.x)?"
+      ],
+      "depNameTemplate": "go",
+      "datasourceTemplate": "golang-version",
+      "versioningTemplate": "semver"
     }
   ],
   "schedule": [
