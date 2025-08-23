@@ -119,10 +119,10 @@ jobs:
       - name: Check job result
         run: |
           RESULT="${{ needs.build-and-test.result }}"
-          if [[ $RESULT == "success" || $RESULT == "skipped" ]]; then
-            echo "Success!!"
-            exit 0
-          else
+          if [[ $RESULT != "success" && $RESULT != "skipped" ]]; then
             echo "This workflow failed or was cancelled!"
             exit 1
           fi
+
+          echo "Success!!"
+          exit 0
