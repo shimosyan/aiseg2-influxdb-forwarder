@@ -111,10 +111,18 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   success:
-    needs:
-      - build-and-test
-    if: ${{ !failure() }}
+    needs: build-and-test
+    if: ${{ always() }}
     runs-on: ubuntu-latest
 
     steps:
-      - run: echo "Success!!"
+      - name: Check job result
+        run: |
+          RESULT="${{ needs.build-and-test.result }}"
+          if [[ $RESULT == "success" || $RESULT == "skipped" ]]; then
+            echo "Terraform plan succeeded or was skipped (no targets)!"
+            exit 0
+          else
+            echo "Terraform plan failed or was cancelled!"
+            exit 1
+          fi
