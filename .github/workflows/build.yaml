@@ -32,9 +32,15 @@ jobs:
         with:
           aqua_version: v2.53.9
 
+      - id: app-token
+        uses: actions/create-github-app-token@a8d616148505b5069dccd32f177bb87d7f39123b # v2.1.1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
+
       - run: github-comment exec -- github-comment hide
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Set up Go
         uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
@@ -55,19 +61,19 @@ jobs:
         run: |
           github-comment exec -k common-error -var title:"Mod Download Failed (Go: ${{ matrix.go-version }})" -- go mod download
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Verify dependencies
         run: |
           github-comment exec -k common-error -var title:"Mod Verify Failed (Go: ${{ matrix.go-version }})" -- go mod verify
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Build application
         run: |
           github-comment exec -k common-error -var title:"Build Failed (Go: ${{ matrix.go-version }})" -- go build -v ./cmd/aiseg2-forwarder
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Check Go formatting
         run: |
@@ -77,19 +83,19 @@ jobs:
             exit 1
           fi
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Run go vet
         run: |
           github-comment exec -k common-error -var title:"Vet Failed (Go: ${{ matrix.go-version }})" -- go vet ./...
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Run tests (if any)
         run: |
           github-comment exec -k common-error -var title:"Test Failed (Go: ${{ matrix.go-version }})" -- go test -v ./...
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
         continue-on-error: true
 
       - name: Set up Docker Buildx
@@ -108,7 +114,7 @@ jobs:
         run: |
           github-comment exec -k common-error -var title:"Docker image built (Go: ${{ matrix.go-version }})" -- docker images aiseg2-forwarder:test --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
 
   success:
     needs: build-and-test
