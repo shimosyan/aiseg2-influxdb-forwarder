@@ -5,48 +5,82 @@
     "helpers:pinGitHubActionDigests",
     "github>aquaproj/aqua-renovate-config#2.8.2"
   ],
-  "labels": ["renovate"],
+  "labels": [
+    "renovate"
+  ],
   "packageRules": [
     {
       "groupName": "Go version updates",
-      "matchManagers": ["gomod", "dockerfile", "github-actions", "regex"],
+      "matchManagers": [
+        "gomod",
+        "dockerfile",
+        "github-actions",
+        "custom.regex"
+      ],
       "matchPackageNames": [
         "go",
         "golang",
         "actions/setup-go"
       ],
-      "addLabels": ["go-version"],
+      "addLabels": [
+        "go-version"
+      ],
       "commitMessagePrefix": "chore(go):",
       "commitMessageTopic": "update Go version",
       "commitMessageExtra": "to {{newVersion}}",
       "automerge": false
     },
     {
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
       "automerge": true
     },
     {
-      "matchDepTypes": ["action"],
-      "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
+      "matchDepTypes": [
+        "action"
+      ],
+      "matchUpdateTypes": [
+        "minor",
+        "patch",
+        "pin",
+        "digest"
+      ],
       "pinDigests": true,
       "automerge": true
     }
   ],
-  "regexManagers": [
+  "customManagers": [
     {
-      "fileMatch": ["^Dockerfile$"],
-      "matchStrings": ["FROM golang:(?<currentValue>\\d+\\.\\d+)-alpine"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^Dockerfile$/"
+      ],
+      "matchStrings": [
+        "FROM golang:(?<currentValue>\\d+\\.\\d+)-alpine"
+      ],
       "depNameTemplate": "golang",
       "datasourceTemplate": "docker"
     },
     {
-      "fileMatch": ["^README\\.md$"],
-      "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)以降"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^README\\.md$/"
+      ],
+      "matchStrings": [
+        "Go (?<currentValue>\\d+\\.\\d+)以降"
+      ],
       "depNameTemplate": "golang",
       "datasourceTemplate": "docker"
     },
     {
-      "fileMatch": ["^\\.github/workflows/.*\\.ya?ml$"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/.*\\.ya?ml$/"
+      ],
       "matchStrings": [
         "- (?<currentValue>\\d+\\.\\d+)\\.x"
       ],
@@ -54,8 +88,13 @@
       "datasourceTemplate": "docker"
     },
     {
-      "fileMatch": ["^\\.github/pull_request_template\\.md$"],
-      "matchStrings": ["Go (?<currentValue>\\d+\\.\\d+)\\+ で動作する"],
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/pull_request_template\\.md$/"
+      ],
+      "matchStrings": [
+        "Go (?<currentValue>\\d+\\.\\d+)\\+ で動作する"
+      ],
       "depNameTemplate": "golang",
       "datasourceTemplate": "docker"
     }
