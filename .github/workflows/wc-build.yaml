@@ -1,13 +1,13 @@
 name: Build and Test
 
 on:
-  pull_request:
-    branches:
-      - main
+  workflow_call:
+    secrets:
+      APP_ID:
+        required: true
+      PRIVATE_KEY:
+        required: true
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}  # デプロイしないため PR レベルの排他制御
-  cancel-in-progress: true # PR の更新があった場合は前のジョブをキャンセルする
 
 permissions:
   id-token: write
@@ -115,20 +115,3 @@ jobs:
           github-comment exec -k common-error -var title:"Docker image built (Go: ${{ matrix.go-version }})" -- docker images aiseg2-forwarder:test --format "table {{.Repository}}\t{{.Tag}}\t{{.Size}}"
         env:
           GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-
-  success:
-    needs: build-and-test
-    if: ${{ always() }}
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Check job result
-        run: |
-          RESULT="${{ needs.build-and-test.result }}"
-          if [[ $RESULT != "success" && $RESULT != "skipped" ]]; then
-            echo "This workflow failed or was cancelled!"
-            exit 1
-          fi
-
-          echo "Success!!"
-          exit 0
