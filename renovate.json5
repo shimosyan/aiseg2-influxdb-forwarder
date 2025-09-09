@@ -1,0 +1,120 @@
+{
+  '$schema': 'https://docs.renovatebot.com/renovate-schema.json',
+
+  extends: [
+    'config:recommended',
+    'helpers:pinGitHubActionDigests',
+    'github>aquaproj/aqua-renovate-config#2.8.2',
+  ],
+
+  labels: [
+    'renovate',
+  ],
+
+  packageRules: [
+    {
+      groupName: 'Go version updates',
+      matchManagers: [
+        'gomod',
+        'dockerfile',
+        'github-actions',
+        'custom.regex',
+      ],
+      matchPackageNames: [
+        'go',
+        'golang',
+        'actions/setup-go',
+      ],
+      addLabels: [
+        'go-version',
+      ],
+      commitMessagePrefix: 'chore(go):',
+      commitMessageTopic: 'update Go version',
+      commitMessageExtra: 'to {{newVersion}}',
+      automerge: false,
+    },
+    {
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+        'pin',
+        'digest',
+      ],
+      automerge: true,
+    },
+    {
+      matchDepTypes: [
+        'action',
+      ],
+      matchUpdateTypes: [
+        'minor',
+        'patch',
+        'pin',
+        'digest',
+      ],
+      pinDigests: true,
+      automerge: true,
+    }
+  ],
+
+  customManagers: [
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^Dockerfile$/',
+      ],
+      matchStrings: [
+        'FROM golang:(?<currentValue>\\d+\\.\\d+)-alpine',
+      ],
+      depNameTemplate: 'golang',
+      datasourceTemplate: 'docker',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^README\\.md$/',
+      ],
+      matchStrings: [
+        'Go (?<currentValue>\\d+\\.\\d+)以降',
+      ],
+      depNameTemplate: 'golang',
+      datasourceTemplate: 'docker',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/workflows/.*\\.ya?ml$/',
+      ],
+      matchStrings: [
+        '- (?<currentValue>\\d+\\.\\d+)\\.x',
+      ],
+      depNameTemplate: 'golang',
+      datasourceTemplate: 'docker',
+    },
+    {
+      customType: 'regex',
+      managerFilePatterns: [
+        '/^\\.github/pull_request_template\\.md$/',
+      ],
+      matchStrings: [
+        'Go (?<currentValue>\\d+\\.\\d+)\\+ で動作する',
+      ],
+      depNameTemplate: 'golang',
+      datasourceTemplate: 'docker',
+    }
+  ],
+
+  prHourlyLimit: 1,
+  prConcurrentLimit: 10,
+  branchConcurrentLimit: 20,
+
+  minimumReleaseAge: '3 days', // 公開後3日間は PR を作成しない
+
+  schedule: [
+    '* 18-23,0-4 * * *',
+  ],
+  platformAutomerge: true,
+
+  timezone: 'Asia/Tokyo',
+  dependencyDashboard: true,
+}
