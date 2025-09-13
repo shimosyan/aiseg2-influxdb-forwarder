@@ -74,6 +74,3 @@ jobs:
           app_private_key: ${{ secrets.PRIVATE_KEY }}
           commit_message: "update: aqua-checksums.json"
           files: aqua-checksums.json
-          commit_message: "update: aqua-checksums.json"
-          files: aqua-checksums.json
-          server_repository: ${{ steps.global-config.outputs.securefix_action_server_repository }}
