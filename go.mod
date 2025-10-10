@@ -2,7 +2,7 @@ module github.com/shimosyan/aiseg2-influxdb-forwarder
 
 go 1.23.0
 
-toolchain go1.25.1
+toolchain go1.25.2
 
 require (
 	github.com/PuerkitoBio/goquery v1.10.3
