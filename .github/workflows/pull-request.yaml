@@ -17,6 +17,7 @@ jobs:
     needs:
       - document-test
       - update-aqua-checksums
+      - update-actions-lock
       - build
     runs-on: ubuntu-latest
     permissions: {}
@@ -40,6 +41,16 @@ jobs:
     secrets:
       CLIENT_ID: ${{secrets.CLIENT_ID}}
       PRIVATE_KEY: ${{secrets.PRIVATE_KEY}}
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+  update-actions-lock:
+    uses: ./.github/workflows/wc-update-actions-lock.yaml
+    secrets:
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
     permissions:
       id-token: write
       contents: read
