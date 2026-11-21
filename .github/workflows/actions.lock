@@ -14,9 +14,6 @@ workflows:
         - 'aquaproj/aqua-installer@v4.1.1'
         - 'docker/build-push-action@v7.4.0'
         - 'docker/setup-buildx-action@v4.4.1'
-    '.github/workflows/wc-document-pull-request.yaml': []
-    '.github/workflows/wc-update-actions-lock.yaml': []
-    '.github/workflows/wc-update-aqua-checksums.yaml': []
 dependencies:
     'actions/cache@v6.1.0':
         ref: 'v6.1.0'
