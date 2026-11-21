@@ -2,13 +2,7 @@
   '$schema': 'https://docs.renovatebot.com/renovate-schema.json',
 
   extends: [
-    'config:recommended',
-    'helpers:pinGitHubActionDigests',
-    'github>aquaproj/aqua-renovate-config#2.15.0',
-  ],
-
-  labels: [
-    'renovate',
+    'github>shimosyan/.github',
   ],
 
   packageRules: [
@@ -33,28 +27,6 @@
       commitMessageExtra: 'to {{newVersion}}',
       automerge: false,
     },
-    {
-      matchUpdateTypes: [
-        'minor',
-        'patch',
-        'pin',
-        'digest',
-      ],
-      automerge: true,
-    },
-    {
-      matchDepTypes: [
-        'action',
-      ],
-      matchUpdateTypes: [
-        'minor',
-        'patch',
-        'pin',
-        'digest',
-      ],
-      pinDigests: true,
-      automerge: true,
-    }
   ],
 
   customManagers: [
@@ -101,17 +73,6 @@
       ],
       depNameTemplate: 'golang',
       datasourceTemplate: 'docker',
-    }
+    },
   ],
-
-  prHourlyLimit: 2,
-  prConcurrentLimit: 10,
-  branchConcurrentLimit: 20,
-
-  minimumReleaseAge: '3 days', // 公開後3日間は PR を作成しない
-
-  platformAutomerge: true,
-
-  timezone: 'Asia/Tokyo',
-  dependencyDashboard: true,
 }
